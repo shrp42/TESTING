@@ -635,3 +635,93 @@ def remove_n_from_end(head, n):
 
 
 # LESSON 5/6
+class LinkedList:
+    def __init__(self, val = 0, next = None):
+        self.val = val
+        self.next = next
+
+def reverse_list(head):
+    if not head or not head.next:
+        return head
+
+    new_head = reverse_list(head.next)
+    head.next.next = head
+    head.next = None
+    return new_head
+
+def merge_two_lists(l1, l2):
+    if not l1: return l2
+    if not l2: return l1
+    if l1.val < l2.val:
+        l1.next = merge_two_lists(l1.next, l2)
+        return l1
+    else:
+        l2.next = merge_two_lists(l1, l2.next)
+        return l2
+
+def linked_cycle_list(head):
+    slow = head
+    fast = head
+    while fast and fast.next:
+        slow = slow.next
+        fast = fast.next.next
+        if slow == fast:
+            return True
+    return False
+
+def remove_from_end(head, n):
+    def helper(node):
+        if not node:
+            return 0, node
+        pos, node.next = helper(node.next)
+        pos += 1
+        if pos == n:
+            return pos, node.next
+        return pos, node
+
+    _, new_head = helper(head)
+    return new_head
+
+# head = LinkedList(1, ListNode(2, ListNode(3)))
+# reversed = reverse_list(head)
+# cur = reversed
+# while cur:
+#     print(cur.val, end=" → ")
+#     cur = cur.next
+# print("None", )
+#
+#
+# l1 = LinkedList(1, ListNode(3, ListNode(5)))
+# l2 = LinkedList(2, ListNode(4, ListNode(6)))
+# merged = merge_two_lists(l1, l2)
+# cur = merged
+# while cur:
+#     print(cur.val, end=" → ")
+#     cur = cur.next
+# print("None")
+#
+#
+# node1 = ListNode(1)
+# node2 = ListNode(2)
+# node3 = ListNode(3)
+# node4 = ListNode(4)
+# node1.next = node2
+# node2.next = node3
+# node3.next = node4
+# node4.next = node2  # создаём цикл
+# print(linked_cycle_list(node1))  # True
+#
+# # 1 → 2 → 3 → 4 → None (без цикла)
+# node4.next = None
+# print(linked_cycle_list(node1))  # False
+#
+#
+# head = LinkedList(1, ListNode(2, ListNode(3, ListNode(4, ListNode(5)))))
+# new = remove_from_end(head, 2)
+# cur = new
+# while cur:
+#     print(cur.val, end=" → ")
+#     cur = cur.next
+# print("None")
+
+
