@@ -1,5 +1,9 @@
 # LESSON 5/6:
 from collections import *
+from idlelib.debugger_r import restart_subprocess_debugger
+from inspect import stack
+from pydoc import visiblename
+
 
 # class TreeNode:
 #     def __init__(self, val = 0, right = None, left = None):
@@ -305,6 +309,322 @@ def two_sum(nums: list(int), target: int) -> list[int]:
 
 # LESSON 7
 
+# class Graph:
+#     def __init__(self, vertices):
+#         self.V = vertices
+#         self.adj = defaultdict(list)
+#
+#     def add_edge(self, u, v):
+#         self.adj[u].append(v)
+#
+#
+#     def bfs(self, start):
+#
+#         visited = [False] * self.V
+#         queue = deque([start])
+#         visited[start] = True
+#         result = []
+#
+#         while queue:
+#             node = queue.popleft()
+#             result.append(node)
+#
+#             for neighbor in self.adj[node]:
+#                 if not visited[neighbor]:
+#                     visited[neighbor] = True
+#                     queue.append(neighbor)
+#
+#         return result
+#
+#
+#
+#     def dfs_util(self, node, visited, result):
+#         visited[node] = True
+#         result.append(node)
+#
+#         for neighbor in self.adj[node]:
+#             if not visited[neighbor]:
+#                 self.dfs_util(neighbor, visited, result)
+#
+#     def dfs(self, start):
+#         visited = [False] * self.V
+#         result = []
+#         self.dfs_util(start, visited, result)
+#         return result
+#
+#
+#
+#     def cyclic_util(self, node, visited, rec_stack):
+#         visited[node] = True
+#         rec_stack[node] = True
+#
+#         for neighbor in self.adj[node]:
+#             if not visited[neighbor] and self.cyclic_util(neighbor, visited, rec_stack):
+#                 return True
+#             elif rec_stack[neighbor]:
+#                 return True
+#
+#         rec_stack[node] = False
+#         return False
+#
+#     def cyclic(self):
+#         visited = [False] * self.V
+#         rec_stack = [False] * self.V
+#
+#         for node in range(self.V):
+#             if not visited[node]:
+#                 if self.cyclic_util(node, visited, rec_stack):
+#                     return True
+#
+#         return False
+#
+#
+#
+#     def shortest_path(self, start):
+#         dist = [float("inf")] * self.V
+#         queue = deque([start])
+#         dist[start] = 0
+#
+#         while queue:
+#             node = queue.popleft()
+#             for neighbor in self.adj[node]:
+#                 if dist[neighbor] == float("inf"):
+#                     dist[neighbor] = dist[node] + 1
+#                     queue.append(neighbor)
+#
+#         return dist
+#
+#
+#
+#     def topological_sorting_util(self, node, visited, stack):
+#         visited[node] = True
+#
+#         for neighbor in self.adj[node]:
+#             if not visited[neighbor]:
+#                 self.topological_sorting_util(neighbor, visited, stack)
+#         stack.append(node)
+#
+#     def topological_sort(self):
+#         visited = [False] * self.V
+#         stack = []
+#
+#         for node in range(self.V):
+#             if not visited[node]:
+#                 self.topological_sorting_util(node, visited, stack)
+#         return stack[::-1]
+#
+
+
+
+# class Graph:
+#     def __init__(self, vertices):
+#         self.V = vertices
+#         self.adj = defaultdict(list)
+#
+#     def add_edge(self, u, v):
+#         self.adj[u].append(v)
+#
+#
+#
+#     def bfs(self, start):
+#         visited = [False] * self.V
+#         queue = deque([start])
+#         visited[start] = True
+#         result = []
+#
+#         while queue:
+#             node = queue.popleft()
+#             result.append(node)
+#
+#             for neighbor in self.adj[node]:
+#                 if not visited[neighbor]:
+#                     visited[neighbor] = True
+#                     queue.append(neighbor)
+#
+#         return result
+#
+#
+#
+#     def dfs_util(self, node, visited, result):
+#         visited[node] = True
+#         result.append(node)
+#
+#         for neighbor in self.adj[node]:
+#             if not visited[neighbor]:
+#                 self.dfs_util(neighbor, visited, result)
+#
+#     def dfs(self, start):
+#         visited = [False] * self.V
+#         result = []
+#         self.dfs_util(start, visited, result)
+#         return result
+#
+#
+#
+#     def cyclic_util(self, node, visited, rec_stack):
+#         visited[node] = True
+#         rec_stack[node] = True
+#
+#         for neighbor in self.adj[node]:
+#             if not visited[neighbor] and self.cyclic_util(neighbor, visited, rec_stack):
+#                 return True
+#             elif rec_stack[neighbor]:
+#                 return True
+#
+#         rec_stack[node] = False
+#         return False
+#
+#     def cyclic(self, start):
+#         visited = [False] * self.V
+#         rec_stack = [False] * self.V
+#
+#         for node in range(self.V):
+#             if not visited[node]:
+#                 if self.cyclic_util(node, visited, rec_stack):
+#                     return True
+#
+#         return False
+#
+#
+#
+#     def shortest_path(self, start):
+#         dist = [float("inf")] * self.V
+#         dist[start] = 0
+#         queue = deque([start])
+#
+#         while queue:
+#             node = queue.popleft()
+#             for neighbor in self.adj[node]:
+#                 if dist[neighbor] == float("inf"):
+#                     dist[neighbor] = dist[node] + 1
+#                     queue.append(neighbor)
+#
+#         return dist
+#
+#
+#
+#     def topological_sort_util(self, node, visited, stack):
+#         visited[node] = True
+#         for neighbor in self.adj[node]:
+#             if not visited[neighbor]:
+#                 self.topological_sort_util(neighbor, visited, stack)
+#         stack.append(node)
+#
+#     def topological_sort(self, start):
+#         visited = [False] * self.V
+#         stack = []
+#         for node in range(self.V):
+#             if not visited[node]:
+#                 self.topological_sort_util(node, visited, stack)
+#         return stack[::-1]
+
+
+# class Graph:
+#     def __init__(self, vertices):
+#         self.V = vertices
+#         self.adj = defaultdict(list)
+#
+#     def add_edge(self, u, v):
+#         self.adj[u].append(v)
+#
+#
+#
+#     def bfs(self, start):
+#         visited = [False] * self.V
+#         queue = deque([start])
+#         visited[start] = True
+#         result = []
+#
+#         while queue:
+#             node = queue.popleft()
+#             result.append(node)
+#
+#             for neighbor in self.adj[node]:
+#                 if not visited[neighbor]:
+#                     visited[neighbor] = True
+#                     queue.append(neighbor)
+#
+#         return result
+#
+#
+#
+#     def dfs_util(self, node, visited, result):
+#         visited[node] = True
+#         result.append(node)
+#
+#         for neighbor in self.adj[node]:
+#             if not visited[neighbor]:
+#                 self.dfs_util(neighbor, visited, result)
+#
+#     def dfs(self, start):
+#         visited = [False] * self.V
+#         result = []
+#         self.dfs_util(start, visited, result)
+#         return result
+#
+#
+#
+#     def cyclic_util(self, node, visited, rec_stack):
+#         visited[node] = True
+#         rec_stack[node] = True
+#
+#         for neighbor in self.adj[node]:
+#             if not visited[neighbor] and self.cyclic_util(neighbor, visited, rec_stack):
+#                 return True
+#             elif rec_stack[neighbor]:
+#                 return True
+#
+#         rec_stack[node] = False
+#         return False
+#
+#     def cyclic_detection(self):
+#         visited = [False] * self.V
+#         rec_stack = [False] * self.V
+#
+#         for node in range(self.V):
+#             if not visited[node]:
+#                 if self.cyclic_util(node, visited, rec_stack):
+#                     return True
+#         return False
+#
+#
+#
+#     def shortest_path(self, start):
+#         dist = [float("inf")] * self.V
+#         dist[start] = 0
+#         queue = deque([start])
+#
+#         while queue:
+#             node = queue.popleft()
+#             for neighbor in self.adj[node]:
+#                 if dist[neighbor] == float("inf"):
+#                     dist[neighbor] = dist[node] + 1
+#                     queue.append(neighbor)
+#
+#         return dist
+#
+#
+#
+#     def topological_sort_util(self, node, visited, stack):
+#         visited[node] = True
+#
+#         for neighbor in self.adj[node]:
+#             if not visited[neighbor]:
+#                 self.topological_sort_util(neighbor, visited, stack)
+#
+#         stack.append(node)
+#
+#     def topological_sort(self):
+#         visited = [False] * self.V
+#         stack = []
+#         for node in range(self.V):
+#             if not visited[node]:
+#                 self.topological_sort_util(node, visited, stack)
+#
+#         return stack[::-1]
+
+
+
 class Graph:
     def __init__(self, vertices):
         self.V = vertices
@@ -314,8 +634,8 @@ class Graph:
         self.adj[u].append(v)
 
 
-    def bfs(self, start):
 
+    def bfs(self, start):
         visited = [False] * self.V
         queue = deque([start])
         visited[start] = True
@@ -350,36 +670,10 @@ class Graph:
 
 
 
-    def cyclic_util(self, node, visited, rec_stack):
-        visited[node] = True
-        rec_stack[node] = True
-
-        for neighbor in self.adj[node]:
-            if not visited[neighbor] and self.cyclic_util(neighbor, visited, rec_stack):
-                return True
-            elif rec_stack[neighbor]:
-                return True
-
-        rec_stack[node] = False
-        return False
-
-    def cyclic(self):
-        visited = [False] * self.V
-        rec_stack = [False] * self.V
-
-        for node in range(self.V):
-            if not visited[node]:
-                if self.cyclic_util(node, visited, rec_stack):
-                    return True
-
-        return False
-
-
-
     def shortest_path(self, start):
         dist = [float("inf")] * self.V
-        queue = deque([start])
         dist[start] = 0
+        queue = deque([start])
 
         while queue:
             node = queue.popleft()
@@ -392,19 +686,46 @@ class Graph:
 
 
 
-    def topological_sorting_util(self, node, visited, stack):
+    def topological_path_util(self, node, visited, stack):
         visited[node] = True
-
         for neighbor in self.adj[node]:
             if not visited[neighbor]:
-                self.topological_sorting_util(neighbor, visited, stack)
+                self.topological_path_util(neighbor, visited, stack)
         stack.append(node)
 
-    def topological_sort(self):
+    def topological_path(self, start):
         visited = [False] * self.V
         stack = []
+        for node in range(self.V):
+            if not visited[node]:
+                self.topological_path_util(node, visited, stack)
+
+        return stack[::-1]
+
+
+
+    def cyclic_detection_util(self, node, visited, rec_stack):
+        visited[node] = True
+        rec_stack[node] = True
+
+        for neighbor in self.adj[node]:
+            if not visited[neighbor] and self.cyclic_detection_util(neighbor, visited, rec_stack):
+                return True
+            elif rec_stack[neighbor]:
+                return True
+
+        rec_stack[node] = False
+        return False
+
+    def cyclic_detection(self):
+        visited = [False] * self.V
+        rec_stack = [False] * self.V
 
         for node in range(self.V):
             if not visited[node]:
-                self.topological_sorting_util(node, visited, stack)
-        return stack[::-1]
+                if self.cyclic_detection_util(node, visited, rec_stack):
+                    return True
+
+        return False
+
+
