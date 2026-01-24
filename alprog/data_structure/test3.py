@@ -3,6 +3,7 @@ from collections import *
 from idlelib.debugger_r import restart_subprocess_debugger
 from inspect import stack
 from pydoc import visiblename
+from signal import valid_signals
 
 
 # class TreeNode:
@@ -625,6 +626,110 @@ def two_sum(nums: list(int), target: int) -> list[int]:
 
 
 
+# class Graph:
+#     def __init__(self, vertices):
+#         self.V = vertices
+#         self.adj = defaultdict(list)
+#
+#     def add_edge(self, u, v):
+#         self.adj[u].append(v)
+#
+#
+#
+#     def bfs(self, start):
+#         visited = [False] * self.V
+#         queue = deque([start])
+#         visited[start] = True
+#         result = []
+#
+#         while queue:
+#             node = queue.popleft()
+#             result.append(node)
+#
+#             for neighbor in self.adj[node]:
+#                 if not visited[neighbor]:
+#                     visited[neighbor] = True
+#                     queue.append(neighbor)
+#
+#         return result
+#
+#
+#
+#     def dfs_util(self, node, visited, result):
+#         visited[node] = True
+#         result.append(node)
+#
+#         for neighbor in self.adj[node]:
+#             if not visited[neighbor]:
+#                 self.dfs_util(neighbor, visited, result)
+#
+#     def dfs(self, start):
+#         visited = [False] * self.V
+#         result = []
+#         self.dfs_util(start, visited, result)
+#         return result
+#
+#
+#
+#     def shortest_path(self, start):
+#         dist = [float("inf")] * self.V
+#         dist[start] = 0
+#         queue = deque([start])
+#
+#         while queue:
+#             node = queue.popleft()
+#             for neighbor in self.adj[node]:
+#                 if dist[neighbor] == float("inf"):
+#                     dist[neighbor] = dist[node] + 1
+#                     queue.append(neighbor)
+#
+#         return dist
+#
+#
+#
+#     def topological_path_util(self, node, visited, stack):
+#         visited[node] = True
+#         for neighbor in self.adj[node]:
+#             if not visited[neighbor]:
+#                 self.topological_path_util(neighbor, visited, stack)
+#         stack.append(node)
+#
+#     def topological_path(self, start):
+#         visited = [False] * self.V
+#         stack = []
+#         for node in range(self.V):
+#             if not visited[node]:
+#                 self.topological_path_util(node, visited, stack)
+#
+#         return stack[::-1]
+#
+#
+#
+#     def cyclic_detection_util(self, node, visited, rec_stack):
+#         visited[node] = True
+#         rec_stack[node] = True
+#
+#         for neighbor in self.adj[node]:
+#             if not visited[neighbor] and self.cyclic_detection_util(neighbor, visited, rec_stack):
+#                 return True
+#             elif rec_stack[neighbor]:
+#                 return True
+#
+#         rec_stack[node] = False
+#         return False
+#
+#     def cyclic_detection(self):
+#         visited = [False] * self.V
+#         rec_stack = [False] * self.V
+#
+#         for node in range(self.V):
+#             if not visited[node]:
+#                 if self.cyclic_detection_util(node, visited, rec_stack):
+#                     return True
+#
+#         return False
+#
+#
 class Graph:
     def __init__(self, vertices):
         self.V = vertices
@@ -662,11 +767,41 @@ class Graph:
             if not visited[neighbor]:
                 self.dfs_util(neighbor, visited, result)
 
-    def dfs(self, start):
+    def dfs(self):
         visited = [False] * self.V
         result = []
-        self.dfs_util(start, visited, result)
+        for node in range(self.V):
+            if not visited[node]:
+                self.dfs_util(node, visited, result)
+
         return result
+
+
+
+    def cyclic_detection_util(self, node, visited, rec_stack):
+        visited[node] = True
+        rec_stack[node] = True
+
+        for neighbor in self.adj[node]:
+            if not visited[neighbor]:
+                if self.cyclic_detection_util(neighbor, visited, rec_stack):
+                    return True
+                elif rec_stack[neighbor]:
+                    return True
+
+        rec_stack[node] = False
+        return False
+
+    def cyclic_detection(self, start):
+        visited = [False] * self.V
+        rec_stack = [False] * self.V
+
+        for node in range(self.V):
+            if not visited[node]:
+                if self.cyclic_detection_util(node, visited, rec_stack):
+                    return True
+
+        return False
 
 
 
@@ -688,44 +823,21 @@ class Graph:
 
     def topological_path_util(self, node, visited, stack):
         visited[node] = True
+
         for neighbor in self.adj[node]:
             if not visited[neighbor]:
                 self.topological_path_util(neighbor, visited, stack)
-        stack.append(node)
 
-    def topological_path(self, start):
+    def topological_path(self):
         visited = [False] * self.V
-        stack = []
+        stack= []
+
         for node in range(self.V):
             if not visited[node]:
                 self.topological_path_util(node, visited, stack)
+        stack.append(node)
 
         return stack[::-1]
 
-
-
-    def cyclic_detection_util(self, node, visited, rec_stack):
-        visited[node] = True
-        rec_stack[node] = True
-
-        for neighbor in self.adj[node]:
-            if not visited[neighbor] and self.cyclic_detection_util(neighbor, visited, rec_stack):
-                return True
-            elif rec_stack[neighbor]:
-                return True
-
-        rec_stack[node] = False
-        return False
-
-    def cyclic_detection(self):
-        visited = [False] * self.V
-        rec_stack = [False] * self.V
-
-        for node in range(self.V):
-            if not visited[node]:
-                if self.cyclic_detection_util(node, visited, rec_stack):
-                    return True
-
-        return False
 
 
